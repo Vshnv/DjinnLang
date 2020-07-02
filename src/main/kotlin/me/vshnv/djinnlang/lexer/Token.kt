@@ -8,22 +8,38 @@ class Token(private val type: TokenType, private val value: String) {
 }
 
 enum class TokenType(val pattern: Regex) {
+    COMMENT(
+        "/\\*[\\S\\s]*\\*/(\n|(\r\n))?".toRegex()
+    ) {
+        override fun evaluate(input: String): Collection<Token> {
+            return emptySet() //Ignoring Comments
+        }
+    },
     VARDEF(
       "var".toRegex()
     ),
     FUNDEF(
         "fun".toRegex()
     ),
-    ARGSTART(
+    DEFINER(
+        ":".toRegex()
+    ),
+    LPAREN(
         "\\(".toRegex()
     ),
-    ARGEND(
+    RPAREN(
         "\\)".toRegex()
     ),
-    SCOPESTART(
+    LBRACKET(
+        "\\[".toRegex()
+    ),
+    RBRACKET(
+        "]".toRegex()
+    ),
+    LBRACE(
       "\\{".toRegex()
     ),
-    SCOPEEND(
+    RBRACE(
         "}".toRegex()
     ),
     STRING(
@@ -48,7 +64,7 @@ enum class TokenType(val pattern: Regex) {
         "=".toRegex()
     ),
     ENDLINE(
-      "\\n".toRegex()
+      "[\\n|\\r\\n]".toRegex()
     ) {
         override fun evaluate(input: String): Collection<Token> {
             return setOf(
@@ -63,7 +79,7 @@ enum class TokenType(val pattern: Regex) {
         "[ \\t\\f\\r\\n]+".toRegex()
     ) {
         override fun evaluate(input: String): Collection<Token> {
-            return setOf() //Ignoring White Spaces
+            return emptySet() //Ignoring White Spaces
         }
     };
 
