@@ -57,13 +57,25 @@ enum class TokenType(val pattern: Regex) {
     CALL(
         "\\.".toRegex()
     ),
+    OPASSIGN(
+        "[+|-|/|*]=".toRegex()
+    ) {
+        override fun evaluate(input: String): Collection<Token> {
+            return setOf(
+                    Token(
+                            this,
+                            input.substringBefore("=")
+                    )
+            )
+        }
+    },
     OPERATOR(
         "[*|/|+|-]".toRegex()
     ),
     ASSIGN(
         "=".toRegex()
     ),
-    ENDLINE(
+    EPSILON(
       "[\\n|\\r\\n]".toRegex()
     ) {
         override fun evaluate(input: String): Collection<Token> {

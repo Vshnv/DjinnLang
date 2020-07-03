@@ -12,7 +12,6 @@ fun String.tokenize(): List<Token> {
         )
     }
 
-
     val tokenPatterns = tokenPatternsBuffer.substring(1).toRegex().toPattern()
     val matcher = tokenPatterns.matcher(this)
 
